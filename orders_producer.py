@@ -3,13 +3,14 @@ import uuid
 
 from confluent_kafka import Producer
 
-producer = Producer({'bootstrap.servers': 'localhost:9092'})
+config = {'bootstrap.servers': 'localhost:9092'}
+producer = Producer(config)
 
 order = {
     "order_id": str(uuid.uuid4()),
-    "buyer": "buyer1",
+    "buyer": "buyer2",
     "product": "product1",
-    "quantity": 10
+    "quantity": 22
 }
 
 value = json.dumps(order).encode("utf-8")
