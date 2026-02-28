@@ -1,0 +1,23 @@
+from orders_producer import OrderProducer
+from DB_handler import DBHandler
+
+
+class Manager:
+    def __init__(self):
+        self.db = DBHandler()
+        self.producer = OrderProducer()
+
+    def get_items(self):
+        sql = """SELECT * FROM stock"""
+        data = self.db.execute(sql, fetch=True)
+        dictData = []
+        for row in data:
+            dictData.append({'item_id': row[2], 'item_name': row[0], 'item_stock': row[1]})
+        return dictData
+
+    def make_order(self, item_id, quantity):
+        order={'item_id': item_id, 'quantity': quantity}
+        self.producer.produce_order(order)
+
+
+

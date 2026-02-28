@@ -15,6 +15,11 @@ class DBConnection:  # Singleton class
             )
         return self.conn
 
+
+class DBHandler:
+    def __init__(self):
+        self.conn = DBConnection()
+
     def execute(self, query, params=None, fetch=False):
         cur = self.conn.cursor()
         cur.execute(query, params)

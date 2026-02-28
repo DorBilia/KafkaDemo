@@ -17,6 +17,5 @@ class OrderProducer:
 
     def produce_order(self, order):
         value = json.dumps(order).encode("utf-8")
-
         self.producer.produce(topic="order", value=value, callback=delivery_status)
         self.producer.flush()  # All buffered event are sent before exiting

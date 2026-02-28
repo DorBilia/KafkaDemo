@@ -1,19 +1,11 @@
 import json
 
 from confluent_kafka import Consumer
-from DB_handler import DBConnection
+from DB_handler import DBHandler
 
-conn = DBConnection()
+conn = DBHandler()
 print("Connected to DB")
 
-
-def execute(query, params=None, fetch=False):
-    cur = conn.cursor()
-    cur.execute(query, params)
-    if fetch:
-        return cur.fetchall()
-    conn.commit()
-    cur.close()
 
 
 def update_stock(order):
@@ -21,7 +13,7 @@ def update_stock(order):
         UPDATE stock SET item_stock = item_stock - %s 
         WHERE item_id = %s
     """
-    execute(sql, params=(order['quantity'], order['item_id']))
+    conn.execute(sql, params=(order['quantity'], order['item_id']))
     print(f'Updated stock quantity of item {order['product']}')
 
 
