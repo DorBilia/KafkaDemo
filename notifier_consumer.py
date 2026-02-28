@@ -4,7 +4,7 @@ from confluent_kafka import Consumer
 
 config = {
     'bootstrap.servers': 'localhost:9092',
-    "group.id": "order-notifier",
+    "group.id": "order-notifier",  # when multiple consumers have the same group id, only one of them gets the event
     "auto.offset.reset": "earliest"  # tells a consumer what to do if it can't find where it last left of reading
     # events, can be earliest/latest/by_duration(configured)/none(throw exception if no offset is found)
 }
