@@ -18,6 +18,6 @@ class Manager:
         return dictData
 
     def make_order(self, item_id, item_name, quantity, username):
-        order = {'order_id': uuid.uuid5(), 'item_id': item_id, 'quantity': quantity, 'product': item_name,
+        order = {'order_id': str(uuid.uuid4()), 'item_id': item_id, 'quantity': quantity, 'product': item_name,
                  'buyer': username}
         self.producer.produce_order(order)
