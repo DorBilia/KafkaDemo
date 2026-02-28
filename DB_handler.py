@@ -2,22 +2,23 @@ import psycopg2
 
 
 class DBConnection:  # Singleton class
-    _instance = None
+    conn = None
 
     def __new__(self):
-        if self._instance is None:
-            self._instance = psycopg2.connect(
+        if self.conn is None:
+            self.conn = psycopg2.connect(
                 database="postgres",
                 user="postgres",
                 password="mypassword",
                 host='localhost',
                 port=5555,
             )
-        return self._instance
+        return self.conn
 
-    @staticmethod
-    def get_instance():
-        if DBConnection._instance is None:
-            DBConnection._instance = DBConnection()
-        return DBConnection._instance
-
+    def execute(self, query, params=None, fetch=False):
+        cur = self.conn.cursor()
+        cur.execute(query, params)
+        if fetch:
+            return cur.fetchall()
+        self.conn.commit()
+        cur.close()

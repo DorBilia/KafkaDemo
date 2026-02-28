@@ -3,7 +3,7 @@ import json
 from confluent_kafka import Consumer
 from DB_handler import DBConnection
 
-conn = DBConnection.get_instance()
+conn = DBConnection()
 print("Connected to DB")
 
 
