@@ -1,5 +1,15 @@
 
 services:
+  postgres:
+    image: postgres:16
+    container_name: postgresKafkaDemo
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: postgres
+    ports:
+      - "5555:5432"
   kafka:
     image: confluentinc/cp-kafka:8.0.4
     container_name: kafka
@@ -25,6 +35,9 @@ services:
 
     volumes:
       - kafka_kraft:/var/lib/kafka/data
+      - postgres_data:/var/lib/postgresql/data
+
 
 volumes:
   kafka_kraft:
+  postgres_data:
