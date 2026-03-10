@@ -1,6 +1,5 @@
 import json
-
-from confluent_kafka import Producer
+from Abstract.AbstractProducer import AbstractProducer
 
 
 def delivery_status(err, msg):
@@ -10,12 +9,11 @@ def delivery_status(err, msg):
         print(f"Delivered! {msg.value().decode("utf-8")}\nDelivered to topic:{msg.topic()}")
 
 
-class OrderProducer:
-    def __init__(self):
-        config = {'bootstrap.servers': 'localhost:9092'}
-        self.producer = Producer(config)
+class OrderProducer(AbstractProducer):
+    def __init__(self, config):
+        super().__init__(config)
 
-    def produce_order(self, order):
+    def publish(self, topic, order):
         value = json.dumps(order).encode("utf-8")
-        self.producer.produce(topic="order", value=value, callback=delivery_status)
+        self.producer.produce(topic=topic, value=value, callback=delivery_status)
         self.producer.flush()  # All buffered event are sent before exiting
