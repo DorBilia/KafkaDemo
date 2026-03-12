@@ -13,6 +13,10 @@ class itemsRepo():
             dictData.append({'item_id': row[0], 'item_name': row[1], 'item_price': row[2], 'item_stock': row[3]})
         return dictData
 
+    def get_item(self, item_id):
+        sql = """SELECT * FROM items WHERE id = %s"""
+        self.conn.execute(sql, (item_id,), fetch=True)
+
     def update_stock_by_order(self, order):
         sql = """UPDATE items SET stock = stock - %s 
             WHERE id = %s """
