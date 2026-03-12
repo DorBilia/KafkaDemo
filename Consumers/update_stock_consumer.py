@@ -20,6 +20,7 @@ class StockUpdate(AbstractConsumer):
                     try:
                         value = msg.value().decode('utf-8')
                         order = json.loads(value)
+                        print(order)
                         self.repo.update_stock_by_order(order)
                     except KeyError:
                         print("Invalid format")

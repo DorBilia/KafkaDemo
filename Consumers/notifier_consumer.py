@@ -17,7 +17,7 @@ class Notifier(AbstractConsumer):
                 else:
                     value = msg.value().decode('utf-8')
                     order = json.loads(value)
-                    print(f"Received order: {order['quantity']} units of {order['product']} for {order['buyer']}")
+                    print(f"Received order: {order['quantity']} units of item # {order['item_id']} for user # {order['user_id']}")
         except KeyboardInterrupt:
             print("Shutting down")
 
