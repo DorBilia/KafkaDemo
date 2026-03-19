@@ -6,23 +6,12 @@ class Notifier(AbstractConsumer):
     def __init__(self, config):
         super().__init__(config, 'order')
 
-    def listen(self):
-        try:
-            while True:
-                msg = self.consumer.poll(1.0)
-                if msg is None:
-                    continue
-                elif msg.error():
-                    print(f"error: {msg.error()}")
-                else:
-                    value = msg.value().decode('utf-8')
-                    order = json.loads(value)
-                    print(f"Received order: {order['quantity']} units of item # {order['item_id']} for user # {order['user_id']}")
-        except KeyboardInterrupt:
-            print("Shutting down")
+    def handle_event(self, msg):
+        value = msg.value().decode('utf-8')
+        order = json.loads(value)
+        print(f"Received order: {order['quantity']} units of item # {order['item_id']} for user # {order['user_id']}")
 
-        finally:
-            self.consumer.close()
+
 config1 = {
     'bootstrap.servers': 'localhost:9092',
     "group.id": "order-notifier",
