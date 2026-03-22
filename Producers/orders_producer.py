@@ -10,8 +10,6 @@ def delivery_status(err, msg):
 
 
 class OrderProducer(AbstractProducer):
-    def __init__(self, config):
-        super().__init__(config)
 
     def publish(self, topic, order):
         value = json.dumps(order).encode("utf-8")
