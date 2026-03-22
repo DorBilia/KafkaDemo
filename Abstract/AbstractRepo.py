@@ -1,7 +1,10 @@
 from abc import abstractmethod
+from DB.DB_handler import DBHandler
 
 
 class AbstractRepo:
+    def __init__(self, conn: DBHandler):
+        self.conn = conn
 
     @abstractmethod
     def add(self, toAdd):
