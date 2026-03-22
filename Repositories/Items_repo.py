@@ -1,10 +1,8 @@
-from DB.DB_handler import DBHandler
 from Abstract.AbstractRepo import AbstractRepo
+from psycopg2 import sql
 
 
 class itemsRepo(AbstractRepo):
-    def __init__(self):
-        self.conn = DBHandler()
 
     def get_all(self):
         sql = """SELECT * FROM items ORDER BY id ASC"""
@@ -23,9 +21,12 @@ class itemsRepo(AbstractRepo):
         return self.conn.execute(sql, (item_id,), fetch=True)
 
     def update_column(self, item_id, column, newValue):
-        sql = """UPDATE items SET %s = %s
-            WHERE id = %s """
-        self.conn.execute(sql, params=(column, newValue, item_id))
+        table = 'items'
+        query = sql.SQL("UPDATE {table} SET {column} = %s WHERE id = %s").format(
+            table=sql.Identifier(table),
+            column=sql.Identifier(column)
+        )
+        self.conn.execute(query, (newValue, item_id))
 
     def delete_by_id(self, item_id):
         sql = """DELETE FROM items WHERE id = %s """

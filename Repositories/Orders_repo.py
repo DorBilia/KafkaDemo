@@ -1,12 +1,8 @@
-from DB.DB_handler import DBHandler
-from Repositories.Users_repo import UsersRepo
 from Abstract.AbstractRepo import AbstractRepo
+from psycopg2 import sql
 
 
 class OrdersRepo(AbstractRepo):
-    def __init__(self):
-        self.conn = DBHandler()
-        self.users = UsersRepo()
 
     def add(self, order):
         sql = """INSERT INTO orders (user_id, item_id, quantity) VALUES
@@ -22,9 +18,13 @@ class OrdersRepo(AbstractRepo):
         return self.conn.execute(sql, (order_id,), fetch=True)
 
     def update_column(self, order_id, column, newValue):
-        sql = """UPDATE orders SET %s = %s
-            WHERE id = %s """
-        self.conn.execute(sql, params=(column, newValue, order_id))
+        table = 'orders'
+        query = sql.SQL("UPDATE {table} SET {column} = %s WHERE id = %s").format(
+            table=sql.Identifier(table),
+            column=sql.Identifier(column)
+        )
+        self.conn.execute(query, (newValue, order_id))
+
     def delete_by_id(self, order_id):
         sql = """DELETE FROM orders WHERE order_id = %s """
         self.conn.execute(sql, (order_id,))
